@@ -46,3 +46,14 @@ Moyori is a React application that helps find optimal meeting locations by calcu
 - API responses map station coordinates (x=longitude, y=latitude)
 - Error handling includes fallbacks for API failures and missing data
 - All text is in Japanese
+
+## Documentation Maintenance
+
+- **README.md Updates**: Always check if README.md content reflects the current implementation when making significant changes to the codebase
+- **Key Areas to Monitor**: 
+  - Project structure changes (new/removed files)
+  - New features or functionality
+  - Technology stack updates (new dependencies)
+  - API changes or integrations
+  - Development commands or scripts
+- **When to Update**: After adding new components, changing architecture, updating dependencies, or modifying core functionality
