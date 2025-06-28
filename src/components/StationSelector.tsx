@@ -71,66 +71,68 @@ const StationSelector: React.FC<StationSelectorProps> = ({
         </select>
       </div>
 
-      {selectedPrefecture && (
-        <div>
-          <h3 className="text-lg font-semibold mb-2">路線を選択</h3>
-          <select
-            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={selectedRoute}
-            onChange={(e) => setSelectedRoute(e.target.value)}
-            disabled={loading}
-          >
-            <option value="">路線を選択してください</option>
-            {routes.map((route) => (
-              <option key={route.name} value={route.name}>
-                {route.name}
-              </option>
-            ))}
-          </select>
-          {loading && (
-            <p className="text-sm text-gray-500 mt-1">読み込み中...</p>
-          )}
-        </div>
-      )}
+      <div>
+        <h3 className="text-lg font-semibold mb-2">路線を選択</h3>
+        <select
+          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:text-gray-400"
+          value={selectedRoute}
+          onChange={(e) => setSelectedRoute(e.target.value)}
+          disabled={!selectedPrefecture || loading}
+        >
+          <option value="">
+            {!selectedPrefecture
+              ? '都道府県を先に選択してください'
+              : '路線を選択してください'}
+          </option>
+          {routes.map((route) => (
+            <option key={route.name} value={route.name}>
+              {route.name}
+            </option>
+          ))}
+        </select>
+        {loading && <p className="text-sm text-gray-500 mt-1">読み込み中...</p>}
+      </div>
 
-      {selectedRoute && (
-        <div>
-          <h3 className="text-lg font-semibold mb-2">駅を選択</h3>
-          <select
-            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onChange={(e) => {
-              const selectedStation = stations.find(
-                (s) => s.name === e.target.value
-              );
-              if (selectedStation) {
-                onStationSelect(selectedStation);
-                e.target.value = '';
-              }
-            }}
-            value=""
-            disabled={loading || selectedStations.length >= MAX_STATIONS}
-          >
-            <option value="">駅を選択してください</option>
-            {availableStations.map((station) => (
-              <option
-                key={`${station.name}-${station.line}`}
-                value={station.name}
-              >
-                {station.name}
-              </option>
-            ))}
-          </select>
-          {loading && (
-            <p className="text-sm text-gray-500 mt-1">読み込み中...</p>
-          )}
-          {selectedStations.length >= MAX_STATIONS && (
-            <p className="text-sm text-orange-600 mt-1">
-              最大{MAX_STATIONS}
-              駅まで選択できます。追加するには既存の駅を削除してください。
-            </p>
-          )}
-        </div>
-      )}
+      <div>
+        <h3 className="text-lg font-semibold mb-2">駅を選択</h3>
+        <select
+          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:text-gray-400"
+          onChange={(e) => {
+            const selectedStation = stations.find(
+              (s) => s.name === e.target.value
+            );
+            if (selectedStation) {
+              onStationSelect(selectedStation);
+              e.target.value = '';
+            }
+          }}
+          value=""
+          disabled={
+            !selectedRoute || loading || selectedStations.length >= MAX_STATIONS
+          }
+        >
+          <option value="">
+            {!selectedRoute
+              ? '路線を先に選択してください'
+              : '駅を選択してください'}
+          </option>
+          {availableStations.map((station) => (
+            <option
+              key={`${station.name}-${station.line}`}
+              value={station.name}
+            >
+              {station.name}
+            </option>
+          ))}
+        </select>
+        {loading && <p className="text-sm text-gray-500 mt-1">読み込み中...</p>}
+        {selectedStations.length >= MAX_STATIONS && (
+          <p className="text-sm text-orange-600 mt-1">
+            最大{MAX_STATIONS}
+            駅まで選択できます。追加するには既存の駅を削除してください。
+          </p>
+        )}
+      </div>
 
       {selectedStations.length > 0 && (
         <div>

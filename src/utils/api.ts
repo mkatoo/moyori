@@ -33,6 +33,26 @@ export interface HeartRailsNearestResponse {
   };
 }
 
+export interface HeartRailsGeoResponse {
+  response: {
+    location: Array<{
+      prefecture: string;
+      city: string;
+      town: string;
+      postal: string;
+      x: string;
+      y: string;
+    }>;
+  };
+}
+
+export interface Address {
+  prefecture: string;
+  city: string;
+  town: string;
+  postal: string;
+}
+
 export const api = {
   async getRoutes(prefecture: string): Promise<Route[]> {
     try {
@@ -99,6 +119,33 @@ export const api = {
       };
     } catch (error) {
       console.error('Failed to fetch nearest station:', error);
+      return null;
+    }
+  },
+
+  async getAddressFromCoordinates(
+    lat: number,
+    lng: number
+  ): Promise<Address | null> {
+    try {
+      const response = await fetch(
+        `https://geoapi.heartrails.com/api/json?method=searchByGeoLocation&x=${lng}&y=${lat}`
+      );
+      const data: HeartRailsGeoResponse = await response.json();
+
+      if (!data.response?.location || data.response.location.length === 0) {
+        return null;
+      }
+
+      const location = data.response.location[0];
+      return {
+        prefecture: location.prefecture,
+        city: location.city,
+        town: location.town,
+        postal: location.postal,
+      };
+    } catch (error) {
+      console.error('Failed to fetch address:', error);
       return null;
     }
   },

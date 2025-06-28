@@ -3,12 +3,14 @@ import StationSelector from './components/StationSelector';
 import Map from './components/Map';
 import { Station } from './data/stations';
 import { calculateCentroid } from './utils/calculations';
-import { api } from './utils/api';
+import { api, Address } from './utils/api';
 import { MAX_STATIONS } from './constants';
 
 function App() {
   const [selectedStations, setSelectedStations] = useState<Station[]>([]);
   const [nearestStation, setNearestStation] = useState<Station | null>(null);
+  const [centroidAddress, setCentroidAddress] = useState<Address | null>(null);
+  const [addressLoading, setAddressLoading] = useState(false);
 
   const handleStationSelect = (station: Station) => {
     setSelectedStations((prev) => {
@@ -37,6 +39,19 @@ function App() {
       api.getNearestStation(centroid.lat, centroid.lng).then(setNearestStation);
     } else {
       setNearestStation(null);
+    }
+  }, [centroid]);
+
+  useEffect(() => {
+    if (centroid) {
+      setAddressLoading(true);
+      api
+        .getAddressFromCoordinates(centroid.lat, centroid.lng)
+        .then(setCentroidAddress)
+        .finally(() => setAddressLoading(false));
+    } else {
+      setCentroidAddress(null);
+      setAddressLoading(false);
     }
   }, [centroid]);
 
@@ -84,6 +99,23 @@ function App() {
                   <p>緯度: {centroid.lat.toFixed(6)}</p>
                   <p>経度: {centroid.lng.toFixed(6)}</p>
                 </div>
+                <div className="mt-3">
+                  <h4 className="text-md font-medium mb-1">住所</h4>
+                  {addressLoading ? (
+                    <p className="text-sm text-gray-500">住所を取得中...</p>
+                  ) : centroidAddress ? (
+                    <div className="text-sm text-gray-600">
+                      <p>
+                        {centroidAddress.prefecture} {centroidAddress.city}
+                        {centroidAddress.town && ` ${centroidAddress.town}`}
+                      </p>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-500">
+                      住所を取得できませんでした
+                    </p>
+                  )}
+                </div>
               </div>
 
               <div>
@@ -93,6 +125,9 @@ function App() {
                     <p className="text-xl font-bold text-blue-800">
                       {nearestStation.name}駅
                     </p>
+                    <div className="text-sm text-gray-600 mt-1">
+                      {nearestStation.line} ({nearestStation.prefecture})
+                    </div>
                     <div className="text-sm text-gray-600 mt-2">
                       <p>緯度: {nearestStation.lat.toFixed(6)}</p>
                       <p>経度: {nearestStation.lng.toFixed(6)}</p>
@@ -116,6 +151,9 @@ function App() {
               <div className="mt-6 p-4 bg-green-50 rounded-md">
                 <p className="text-green-800 font-medium">
                   <span className="font-bold">{nearestStation.name}駅</span>
+                  <span className="text-sm text-green-700 ml-2">
+                    ({nearestStation.line} - {nearestStation.prefecture})
+                  </span>
                   が最適な待ち合わせ場所です！
                 </p>
               </div>
