@@ -3,6 +3,7 @@ import StationSelector from './components/StationSelector';
 import { Station } from './data/stations';
 import { calculateCentroid } from './utils/calculations';
 import { api } from './utils/api';
+import { MAX_STATIONS } from './constants';
 
 function App() {
   const [selectedStations, setSelectedStations] = useState<Station[]>([]);
@@ -10,7 +11,7 @@ function App() {
 
   const handleStationSelect = (station: Station) => {
     setSelectedStations((prev) => {
-      if (prev.length >= 5) {
+      if (prev.length >= MAX_STATIONS) {
         return prev;
       }
       return [...prev, station];

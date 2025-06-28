@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Station, Route, prefectures } from '../data/stations';
 import { api } from '../utils/api';
+import { MAX_STATIONS } from '../constants';
 
 interface StationSelectorProps {
   selectedStations: Station[];
@@ -107,7 +108,7 @@ const StationSelector: React.FC<StationSelectorProps> = ({
               }
             }}
             value=""
-            disabled={loading || selectedStations.length >= 5}
+            disabled={loading || selectedStations.length >= MAX_STATIONS}
           >
             <option value="">駅を選択してください</option>
             {availableStations.map((station) => (
@@ -122,9 +123,10 @@ const StationSelector: React.FC<StationSelectorProps> = ({
           {loading && (
             <p className="text-sm text-gray-500 mt-1">読み込み中...</p>
           )}
-          {selectedStations.length >= 5 && (
+          {selectedStations.length >= MAX_STATIONS && (
             <p className="text-sm text-orange-600 mt-1">
-              最大5駅まで選択できます。追加するには既存の駅を削除してください。
+              最大{MAX_STATIONS}
+              駅まで選択できます。追加するには既存の駅を削除してください。
             </p>
           )}
         </div>
