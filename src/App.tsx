@@ -9,7 +9,7 @@ function App() {
   const [nearestStation, setNearestStation] = useState<Station | null>(null);
 
   const handleStationSelect = (station: Station) => {
-    setSelectedStations(prev => {
+    setSelectedStations((prev) => {
       if (prev.length >= 5) {
         return prev;
       }
@@ -18,7 +18,7 @@ function App() {
   };
 
   const handleStationRemove = (stationName: string) => {
-    setSelectedStations(prev => prev.filter(s => s.name !== stationName));
+    setSelectedStations((prev) => prev.filter((s) => s.name !== stationName));
   };
 
   const centroid = useMemo(() => {
@@ -32,8 +32,7 @@ function App() {
 
   useEffect(() => {
     if (centroid) {
-      api.getNearestStation(centroid.lat, centroid.lng)
-        .then(setNearestStation);
+      api.getNearestStation(centroid.lat, centroid.lng).then(setNearestStation);
     } else {
       setNearestStation(null);
     }
@@ -75,7 +74,7 @@ function App() {
         {selectedStations.length >= 2 && centroid && (
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-xl font-semibold mb-4">計算結果</h2>
-            
+
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <h3 className="text-lg font-medium mb-2">選択された駅の重心</h3>
@@ -114,7 +113,8 @@ function App() {
             {nearestStation ? (
               <div className="mt-6 p-4 bg-green-50 rounded-md">
                 <p className="text-green-800 font-medium">
-                  <span className="font-bold">{nearestStation.name}駅</span>が最適な待ち合わせ場所です！
+                  <span className="font-bold">{nearestStation.name}駅</span>
+                  が最適な待ち合わせ場所です！
                 </p>
               </div>
             ) : (

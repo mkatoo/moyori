@@ -36,15 +36,17 @@ export interface HeartRailsNearestResponse {
 export const api = {
   async getRoutes(prefecture: string): Promise<Route[]> {
     try {
-      const response = await fetch(`${API_BASE}?method=getLines&prefecture=${encodeURIComponent(prefecture)}`);
+      const response = await fetch(
+        `${API_BASE}?method=getLines&prefecture=${encodeURIComponent(prefecture)}`
+      );
       const data: HeartRailsRouteResponse = await response.json();
-      
+
       if (!data.response?.line) {
         return [];
       }
-      
-      return data.response.line.map(line => ({
-        name: line
+
+      return data.response.line.map((line) => ({
+        name: line,
       }));
     } catch (error) {
       console.error('Failed to fetch routes:', error);
@@ -54,19 +56,21 @@ export const api = {
 
   async getStations(line: string): Promise<Station[]> {
     try {
-      const response = await fetch(`${API_BASE}?method=getStations&line=${encodeURIComponent(line)}`);
+      const response = await fetch(
+        `${API_BASE}?method=getStations&line=${encodeURIComponent(line)}`
+      );
       const data: HeartRailsStationResponse = await response.json();
-      
+
       if (!data.response?.station) {
         return [];
       }
-      
-      return data.response.station.map(station => ({
+
+      return data.response.station.map((station) => ({
         name: station.name,
         lat: parseFloat(station.y),
         lng: parseFloat(station.x),
         prefecture: station.prefecture,
-        line: station.line
+        line: station.line,
       }));
     } catch (error) {
       console.error('Failed to fetch stations:', error);
@@ -76,24 +80,26 @@ export const api = {
 
   async getNearestStation(lat: number, lng: number): Promise<Station | null> {
     try {
-      const response = await fetch(`${API_BASE}?method=getStations&x=${lng}&y=${lat}`);
+      const response = await fetch(
+        `${API_BASE}?method=getStations&x=${lng}&y=${lat}`
+      );
       const data: HeartRailsNearestResponse = await response.json();
-      
+
       if (!data.response?.station || data.response.station.length === 0) {
         return null;
       }
-      
+
       const nearest = data.response.station[0];
       return {
         name: nearest.name,
         lat: parseFloat(nearest.y),
         lng: parseFloat(nearest.x),
         prefecture: nearest.prefecture,
-        line: nearest.line
+        line: nearest.line,
       };
     } catch (error) {
       console.error('Failed to fetch nearest station:', error);
       return null;
     }
-  }
+  },
 };

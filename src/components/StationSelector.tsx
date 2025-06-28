@@ -22,7 +22,8 @@ const StationSelector: React.FC<StationSelectorProps> = ({
   useEffect(() => {
     if (selectedPrefecture) {
       setLoading(true);
-      api.getRoutes(selectedPrefecture)
+      api
+        .getRoutes(selectedPrefecture)
         .then(setRoutes)
         .finally(() => setLoading(false));
       setSelectedRoute('');
@@ -37,7 +38,8 @@ const StationSelector: React.FC<StationSelectorProps> = ({
   useEffect(() => {
     if (selectedRoute) {
       setLoading(true);
-      api.getStations(selectedRoute)
+      api
+        .getStations(selectedRoute)
         .then(setStations)
         .finally(() => setLoading(false));
     } else {
@@ -46,7 +48,8 @@ const StationSelector: React.FC<StationSelectorProps> = ({
   }, [selectedRoute]);
 
   const availableStations = stations.filter(
-    station => !selectedStations.some(selected => selected.name === station.name)
+    (station) =>
+      !selectedStations.some((selected) => selected.name === station.name)
   );
 
   return (
@@ -59,7 +62,7 @@ const StationSelector: React.FC<StationSelectorProps> = ({
           onChange={(e) => setSelectedPrefecture(e.target.value)}
         >
           <option value="">都道府県を選択してください</option>
-          {prefectures.map(prefecture => (
+          {prefectures.map((prefecture) => (
             <option key={prefecture.name} value={prefecture.name}>
               {prefecture.name}
             </option>
@@ -77,13 +80,15 @@ const StationSelector: React.FC<StationSelectorProps> = ({
             disabled={loading}
           >
             <option value="">路線を選択してください</option>
-            {routes.map(route => (
+            {routes.map((route) => (
               <option key={route.name} value={route.name}>
                 {route.name}
               </option>
             ))}
           </select>
-          {loading && <p className="text-sm text-gray-500 mt-1">読み込み中...</p>}
+          {loading && (
+            <p className="text-sm text-gray-500 mt-1">読み込み中...</p>
+          )}
         </div>
       )}
 
@@ -93,7 +98,9 @@ const StationSelector: React.FC<StationSelectorProps> = ({
           <select
             className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             onChange={(e) => {
-              const selectedStation = stations.find(s => s.name === e.target.value);
+              const selectedStation = stations.find(
+                (s) => s.name === e.target.value
+              );
               if (selectedStation) {
                 onStationSelect(selectedStation);
                 e.target.value = '';
@@ -103,13 +110,18 @@ const StationSelector: React.FC<StationSelectorProps> = ({
             disabled={loading || selectedStations.length >= 5}
           >
             <option value="">駅を選択してください</option>
-            {availableStations.map(station => (
-              <option key={`${station.name}-${station.line}`} value={station.name}>
+            {availableStations.map((station) => (
+              <option
+                key={`${station.name}-${station.line}`}
+                value={station.name}
+              >
                 {station.name}
               </option>
             ))}
           </select>
-          {loading && <p className="text-sm text-gray-500 mt-1">読み込み中...</p>}
+          {loading && (
+            <p className="text-sm text-gray-500 mt-1">読み込み中...</p>
+          )}
           {selectedStations.length >= 5 && (
             <p className="text-sm text-orange-600 mt-1">
               最大5駅まで選択できます。追加するには既存の駅を削除してください。

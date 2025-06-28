@@ -19,23 +19,31 @@ export function calculateCentroid(stations: Station[]): Coordinate {
   };
 }
 
-export function calculateDistance(coord1: Coordinate, coord2: Coordinate): number {
+export function calculateDistance(
+  coord1: Coordinate,
+  coord2: Coordinate
+): number {
   const R = 6371; // 地球の半径（km）
-  const dLat = (coord2.lat - coord1.lat) * Math.PI / 180;
-  const dLng = (coord2.lng - coord1.lng) * Math.PI / 180;
-  
-  const a = 
+  const dLat = ((coord2.lat - coord1.lat) * Math.PI) / 180;
+  const dLng = ((coord2.lng - coord1.lng) * Math.PI) / 180;
+
+  const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(coord1.lat * Math.PI / 180) * Math.cos(coord2.lat * Math.PI / 180) *
-    Math.sin(dLng / 2) * Math.sin(dLng / 2);
-  
+    Math.cos((coord1.lat * Math.PI) / 180) *
+      Math.cos((coord2.lat * Math.PI) / 180) *
+      Math.sin(dLng / 2) *
+      Math.sin(dLng / 2);
+
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const distance = R * c;
-  
+
   return distance;
 }
 
-export function findNearestStation(centroid: Coordinate, allStations: Station[]): Station {
+export function findNearestStation(
+  centroid: Coordinate,
+  allStations: Station[]
+): Station {
   if (allStations.length === 0) {
     throw new Error('駅データがありません');
   }
