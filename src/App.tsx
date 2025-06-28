@@ -1,17 +1,24 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import StationSelector from './components/StationSelector';
-import { stations, Station } from './data/stations';
-import { calculateCentroid, findNearestStation } from './utils/calculations';
+import { Station } from './data/stations';
+import { calculateCentroid } from './utils/calculations';
+import { api } from './utils/api';
 
 function App() {
   const [selectedStations, setSelectedStations] = useState<Station[]>([]);
+  const [nearestStation, setNearestStation] = useState<Station | null>(null);
 
   const handleStationSelect = (station: Station) => {
-    setSelectedStations(prev => [...prev, station]);
+    setSelectedStations(prev => {
+      if (prev.length >= 5) {
+        return prev;
+      }
+      return [...prev, station];
+    });
   };
 
-  const handleStationRemove = (stationId: string) => {
-    setSelectedStations(prev => prev.filter(s => s.id !== stationId));
+  const handleStationRemove = (stationName: string) => {
+    setSelectedStations(prev => prev.filter(s => s.name !== stationName));
   };
 
   const centroid = useMemo(() => {
@@ -23,12 +30,12 @@ function App() {
     }
   }, [selectedStations]);
 
-  const nearestStation = useMemo(() => {
-    if (!centroid) return null;
-    try {
-      return findNearestStation(centroid, stations);
-    } catch {
-      return null;
+  useEffect(() => {
+    if (centroid) {
+      api.getNearestStation(centroid.lat, centroid.lng)
+        .then(setNearestStation);
+    } else {
+      setNearestStation(null);
     }
   }, [centroid]);
 
@@ -48,7 +55,6 @@ function App() {
 
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <StationSelector
-            stations={stations}
             selectedStations={selectedStations}
             onStationSelect={handleStationSelect}
             onStationRemove={handleStationRemove}
@@ -66,7 +72,7 @@ function App() {
           )}
         </div>
 
-        {selectedStations.length >= 2 && centroid && nearestStation && (
+        {selectedStations.length >= 2 && centroid && (
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-xl font-semibold mb-4">計算結果</h2>
             
@@ -81,23 +87,46 @@ function App() {
 
               <div>
                 <h3 className="text-lg font-medium mb-2">最寄りの駅</h3>
-                <div className="bg-blue-50 p-4 rounded-md">
-                  <p className="text-xl font-bold text-blue-800">
-                    {nearestStation.name}駅
-                  </p>
-                  <div className="text-sm text-gray-600 mt-2">
-                    <p>緯度: {nearestStation.lat.toFixed(6)}</p>
-                    <p>経度: {nearestStation.lng.toFixed(6)}</p>
+                {nearestStation ? (
+                  <div className="bg-blue-50 p-4 rounded-md">
+                    <p className="text-xl font-bold text-blue-800">
+                      {nearestStation.name}駅
+                    </p>
+                    <div className="text-sm text-gray-600 mt-2">
+                      <p>緯度: {nearestStation.lat.toFixed(6)}</p>
+                      <p>経度: {nearestStation.lng.toFixed(6)}</p>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="bg-orange-50 p-4 rounded-md border border-orange-200">
+                    <p className="text-orange-800 font-medium">
+                      最寄り駅が見つかりませんでした
+                    </p>
+                    <p className="text-sm text-orange-700 mt-2">
+                      選択された駅が離れすぎているため、重心付近に駅が存在しない可能性があります。
+                      より近い場所にある駅を選択してみてください。
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
 
-            <div className="mt-6 p-4 bg-green-50 rounded-md">
-              <p className="text-green-800 font-medium">
-                <span className="font-bold">{nearestStation.name}駅</span>が最適な待ち合わせ場所です！
-              </p>
-            </div>
+            {nearestStation ? (
+              <div className="mt-6 p-4 bg-green-50 rounded-md">
+                <p className="text-green-800 font-medium">
+                  <span className="font-bold">{nearestStation.name}駅</span>が最適な待ち合わせ場所です！
+                </p>
+              </div>
+            ) : (
+              <div className="mt-6 p-4 bg-yellow-50 rounded-md border border-yellow-200">
+                <p className="text-yellow-800 font-medium">
+                  重心は計算できましたが、その付近に駅が見つかりませんでした。
+                </p>
+                <p className="text-sm text-yellow-700 mt-1">
+                  同じ地域や近い地域の駅を選択することをお勧めします。
+                </p>
+              </div>
+            )}
           </div>
         )}
 

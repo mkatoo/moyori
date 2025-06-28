@@ -1,46 +1,65 @@
 export interface Station {
-  id: string;
   name: string;
   lat: number;
   lng: number;
+  prefecture: string;
+  line: string;
 }
 
-export const stations: Station[] = [
-  // 東京都内主要駅
-  { id: "tokyo", name: "東京", lat: 35.6812, lng: 139.7671 },
-  { id: "shinjuku", name: "新宿", lat: 35.6896, lng: 139.7006 },
-  { id: "shibuya", name: "渋谷", lat: 35.6580, lng: 139.7016 },
-  { id: "ikebukuro", name: "池袋", lat: 35.7295, lng: 139.7109 },
-  { id: "shinagawa", name: "品川", lat: 35.6284, lng: 139.7387 },
-  
-  // 神奈川県主要駅
-  { id: "yokohama", name: "横浜", lat: 35.4657, lng: 139.6220 },
-  { id: "kawasaki", name: "川崎", lat: 35.5308, lng: 139.6970 },
-  { id: "fujisawa", name: "藤沢", lat: 35.3405, lng: 139.4893 },
-  
-  // 埼玉県主要駅
-  { id: "omiya", name: "大宮", lat: 35.9067, lng: 139.6235 },
-  { id: "urawa", name: "浦和", lat: 35.8617, lng: 139.6449 },
-  
-  // 千葉県主要駅
-  { id: "chiba", name: "千葉", lat: 35.6074, lng: 140.1065 },
-  { id: "funabashi", name: "船橋", lat: 35.6955, lng: 139.9846 },
-  
-  // 大阪府主要駅
-  { id: "osaka", name: "大阪", lat: 34.7024, lng: 135.4959 },
-  { id: "namba", name: "難波", lat: 34.6658, lng: 135.5007 },
-  { id: "tennoji", name: "天王寺", lat: 34.6452, lng: 135.5066 },
-  
-  // 兵庫県主要駅
-  { id: "kobe", name: "神戸", lat: 34.6726, lng: 135.1830 },
-  { id: "nishinomiya", name: "西宮", lat: 34.7406, lng: 135.3417 },
-  
-  // 京都府主要駅
-  { id: "kyoto", name: "京都", lat: 34.9859, lng: 135.7581 },
-  
-  // 愛知県主要駅
-  { id: "nagoya", name: "名古屋", lat: 35.1709, lng: 136.8815 },
-  
-  // 福岡県主要駅
-  { id: "hakata", name: "博多", lat: 33.5904, lng: 130.4217 },
+export interface Route {
+  name: string;
+}
+
+export interface Prefecture {
+  name: string;
+}
+
+export const prefectures: Prefecture[] = [
+  { name: "北海道" },
+  { name: "青森県" },
+  { name: "岩手県" },
+  { name: "宮城県" },
+  { name: "秋田県" },
+  { name: "山形県" },
+  { name: "福島県" },
+  { name: "茨城県" },
+  { name: "栃木県" },
+  { name: "群馬県" },
+  { name: "埼玉県" },
+  { name: "千葉県" },
+  { name: "東京都" },
+  { name: "神奈川県" },
+  { name: "新潟県" },
+  { name: "富山県" },
+  { name: "石川県" },
+  { name: "福井県" },
+  { name: "山梨県" },
+  { name: "長野県" },
+  { name: "岐阜県" },
+  { name: "静岡県" },
+  { name: "愛知県" },
+  { name: "三重県" },
+  { name: "滋賀県" },
+  { name: "京都府" },
+  { name: "大阪府" },
+  { name: "兵庫県" },
+  { name: "奈良県" },
+  { name: "和歌山県" },
+  { name: "鳥取県" },
+  { name: "島根県" },
+  { name: "岡山県" },
+  { name: "広島県" },
+  { name: "山口県" },
+  { name: "徳島県" },
+  { name: "香川県" },
+  { name: "愛媛県" },
+  { name: "高知県" },
+  { name: "福岡県" },
+  { name: "佐賀県" },
+  { name: "長崎県" },
+  { name: "熊本県" },
+  { name: "大分県" },
+  { name: "宮崎県" },
+  { name: "鹿児島県" },
+  { name: "沖縄県" },
 ];
