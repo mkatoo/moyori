@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import StationSelector from './components/StationSelector';
+import Map from './components/Map';
 import { Station } from './data/stations';
 import { calculateCentroid } from './utils/calculations';
 import { api } from './utils/api';
@@ -128,6 +129,27 @@ function App() {
                 </p>
               </div>
             )}
+
+            <div className="mt-6">
+              <h3 className="text-lg font-medium mb-4">地図表示</h3>
+              <div className="mb-2 text-sm text-gray-600">
+                <span className="inline-block w-3 h-3 bg-blue-500 rounded-full mr-2"></span>
+                選択された駅
+                <span className="inline-block w-3 h-3 bg-red-500 rounded-full mr-2 ml-4"></span>
+                重心
+                {nearestStation && (
+                  <>
+                    <span className="inline-block w-3 h-3 bg-green-500 rounded-full mr-2 ml-4"></span>
+                    最寄り駅
+                  </>
+                )}
+              </div>
+              <Map
+                selectedStations={selectedStations}
+                centroid={centroid}
+                nearestStation={nearestStation}
+              />
+            </div>
           </div>
         )}
 
