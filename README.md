@@ -14,7 +14,9 @@
 
 - **フロントエンド**: React 18, TypeScript, Tailwind CSS
 - **地図表示**: Leaflet, React-Leaflet
-- **外部API**: HeartRails Express API（日本の鉄道データ）
+- **外部API**: 
+  - HeartRails Express API（日本の鉄道データ）
+  - HeartRails Geo API（逆ジオコーディング）
 - **開発ツール**: ESLint, Prettier
 - **ビルドツール**: Create React App
 
@@ -69,10 +71,13 @@ src/
 
 ## API仕様
 
-HeartRails Express API (`express.heartrails.com`) を使用:
+### HeartRails Express API (`express.heartrails.com`)
 - `getLines`: 都道府県の路線一覧取得
 - `getStations`: 路線の駅一覧取得
 - `getStations` (座標指定): 指定座標に最も近い駅を取得
+
+### HeartRails Geo API (`geoapi.heartrails.com`)
+- `searchByGeoLocation`: 緯度・経度から住所情報を取得（逆ジオコーディング）
 
 ## 技術詳細
 
