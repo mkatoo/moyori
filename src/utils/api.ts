@@ -149,4 +149,32 @@ export const api = {
       return null;
     }
   },
+
+  async searchStationsByName(name: string): Promise<Station[]> {
+    if (!name.trim()) {
+      return [];
+    }
+
+    try {
+      const response = await fetch(
+        `${API_BASE}?method=getStations&name=${encodeURIComponent(name)}`
+      );
+      const data: HeartRailsStationResponse = await response.json();
+
+      if (!data.response?.station) {
+        return [];
+      }
+
+      return data.response.station.map((station) => ({
+        name: station.name,
+        lat: parseFloat(station.y),
+        lng: parseFloat(station.x),
+        prefecture: station.prefecture,
+        line: station.line,
+      }));
+    } catch (error) {
+      console.error('Failed to search stations by name:', error);
+      return [];
+    }
+  },
 };
