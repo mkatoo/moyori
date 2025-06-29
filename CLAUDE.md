@@ -13,7 +13,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run format` - Format code with Prettier
 - `npm run format:check` - Check if code is properly formatted
 
-**Important**: After making code changes, always run `npm run lint` and `npm run format` to ensure code quality and consistent formatting.
+## Code Quality Enforcement
+
+**MANDATORY**: At the end of any coding session, you MUST run the following commands in order and ensure they all pass:
+
+1. `npm test` - All tests must pass
+2. `npm run lint` - ESLint must pass with no errors
+3. `npm run format` - Code must be properly formatted
+
+**Do not consider the task complete until all three commands pass successfully.** If any command fails, fix the issues before finishing.
 
 ## Project Overview
 
