@@ -14,9 +14,10 @@
 
 - **フロントエンド**: React 18, TypeScript, Tailwind CSS
 - **地図表示**: Leaflet, React-Leaflet
-- **外部API**: 
+- **外部API**:
   - HeartRails Express API（日本の鉄道データ）
   - HeartRails Geo API（逆ジオコーディング）
+- **テスト**: Jest, React Testing Library, @testing-library/jest-dom, @testing-library/user-event
 - **開発ツール**: ESLint, Prettier
 - **ビルドツール**: Create React App
 
@@ -32,8 +33,14 @@ npm start
 # プロダクションビルド
 npm run build
 
-# テスト実行
+# テスト実行（ウォッチモード）
 npm test
+
+# テスト実行（1回のみ）
+npm test -- --watchAll=false
+
+# 特定のテストファイルを実行
+npm test -- --testPathPattern=App.test.tsx
 
 # コード品質チェック
 npm run lint
@@ -64,18 +71,22 @@ npm run format:check
 
 ```
 src/
+├── __tests__/               # アプリケーションテスト
 ├── components/
-│   ├── Map.tsx               # Leaflet地図コンポーネント
-│   ├── StationSearch.tsx     # フリーワード駅検索コンポーネント
-│   └── StationSelector.tsx   # 駅選択メインコンポーネント（タブ切り替え）
+│   ├── __tests__/           # コンポーネントテスト
+│   ├── Map.tsx              # Leaflet地図コンポーネント
+│   ├── StationSearch.tsx    # フリーワード駅検索コンポーネント
+│   └── StationSelector.tsx  # 駅選択メインコンポーネント（タブ切り替え）
 ├── data/
-│   └── stations.ts          # 駅・路線・都道府県のインターフェース定義
+│   └── stations.ts         # 駅・路線・都道府県のインターフェース定義
 ├── utils/
-│   ├── api.ts               # HeartRails Express API連携
-│   └── calculations.ts      # 重心・距離計算（ハーヴァサイン公式）
-├── constants.ts             # アプリケーション定数
-├── App.tsx                  # メインアプリケーション
-└── index.tsx                # エントリーポイント
+│   ├── __tests__/          # ユーティリティ関数テスト
+│   ├── api.ts              # HeartRails Express API連携
+│   └── calculations.ts     # 重心・距離計算（ハーヴァサイン公式）
+├── constants.ts            # アプリケーション定数
+├── setupTests.ts           # Jest設定ファイル
+├── App.tsx                 # メインアプリケーション
+└── index.tsx               # エントリーポイント
 ```
 
 ## API仕様
@@ -88,6 +99,27 @@ src/
 
 ### HeartRails Geo API (`geoapi.heartrails.com`)
 - `searchByGeoLocation`: 緯度・経度から住所情報を取得（逆ジオコーディング）
+
+## テスト
+
+アプリケーションには包括的なテストスイートが実装されています。
+
+### テスト内容
+- **ユニットテスト**: 重心・距離計算、API関数のテスト
+- **コンポーネントテスト**: 駅選択、重心表示、エラーハンドリングのテスト
+- **統合テスト**: ユーザー操作フローとAPI連携のテスト
+
+### テスト実行
+```bash
+# 全テスト実行
+npm test
+
+# テストカバレッジを表示
+npm test -- --coverage
+
+# 特定のテストのみ実行
+npm test -- --testPathPattern=calculations
+```
 
 ## 技術詳細
 
