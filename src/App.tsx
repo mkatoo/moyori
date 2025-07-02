@@ -65,7 +65,7 @@ function App() {
         <header className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Moyori</h1>
           <p className="text-gray-600">
-            複数の最寄り駅から重心を計算し、最適な待ち合わせ場所を見つけます
+            複数の最寄り駅から最適な待ち合わせ場所を見つけます
           </p>
         </header>
 

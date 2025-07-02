@@ -101,7 +101,7 @@ describe('App', () => {
     expect(screen.getByText('Moyori')).toBeInTheDocument();
     expect(
       screen.getByText(
-        '複数の最寄り駅から重心を計算し、最適な待ち合わせ場所を見つけます'
+        '複数の最寄り駅から最適な待ち合わせ場所を見つけます'
       )
     ).toBeInTheDocument();
   });
